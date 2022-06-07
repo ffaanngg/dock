@@ -1,11 +1,13 @@
 [package]
-name = "dock"
+name = "dock-derive"
 version = "0.1.0"
 edition = "2021"
-description = "The simple, fast and powerful command line parser"
+description = "Default macro implementations for dock"
 license = "Apache-2.0"
-repository = "https://github.com/dimensionhq/dock"
-homepage = "dock.dev"
+
+[lib]
+proc-macro = true
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
 [dependencies]
