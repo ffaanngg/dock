@@ -108,6 +108,7 @@ impl App {
         self
     }
 
+    #[allow(unused_mut)]
     pub fn register_command(mut self) -> Self {
         todo!()
     }
