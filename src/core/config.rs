@@ -24,14 +24,20 @@ pub struct AppConfig {
     pub version: Option<String>,
 }
 
-impl AppConfig {
-    pub fn new() -> Self {
+impl Default for AppConfig {
+    fn default() -> Self {
         Self {
             name: None,
             description: None,
             authors: None,
             version: None,
         }
+    }
+}
+
+impl AppConfig {
+    pub fn new() -> Self {
+        Default::default()
     }
 
     pub fn from_crate() -> Self {

@@ -1,14 +1,13 @@
 #![allow(unused, dead_code)]
 
 use crate::core::config::AppConfig;
-use human_panic::setup_panic;
 use std::fs;
 
 /// Represents a Dock application
 ///
 /// An `App` instance is used to build and run a command line application from start to finish.
 ///
-/// When a Dock app is initialized, by default, human_panic handler is set and on windows, an attempt to enable ansi support is made.
+/// When a Dock app is initialized, by default, an attempt to enable ansi support is made.
 ///
 /// The suggested approach is to use the [`App::from_crate`] constructor to automatically build an application based on the crate config.
 /// ```rsmno_run
@@ -22,11 +21,9 @@ use std::fs;
 /// However, it can be set manually and built by each stage using their respective config setters.
 ///
 /// ```rs,no_run
-/// fn main(){
 ///     App::new()
 ///         .set_name("Dock")
 ///         .run()
-/// }
 /// ```
 ///  
 /// The command line application starts when the [`App::run()`] method is called.
@@ -47,8 +44,6 @@ impl App {
     /// The setup function called when an application is initialized.
     /// This performs all the preliminary setup required to make sure the Dock application sails smoothly.
     fn setup() {
-        setup_panic!();
-
         #[cfg(windows)]
         let _ = ansi_term::enable_ansi_support();
     }
