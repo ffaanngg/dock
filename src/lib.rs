@@ -3,3 +3,5 @@
 pub mod core;
 
 pub use crate::core::*;
+
+pub use ansi_term::Color::*;
