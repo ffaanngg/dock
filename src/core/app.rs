@@ -1,7 +1,4 @@
-#![allow(unused, dead_code)]
-
 use crate::core::config::AppConfig;
-use std::fs;
 
 /// Represents a Dock application
 ///
@@ -51,15 +48,17 @@ impl App {
     /// Manual constructor
     ///
     /// All the config values should be set manually using the respective config setters
+    #[must_use]
     pub fn new() -> Self {
         App::setup();
 
-        Default::default()
+        Self::default()
     }
 
     /// Preferred constructor
     ///
     /// All the config values are automatically taken from the crate's `Config.toml` to build the application.
+    #[must_use]
     pub fn from_crate() -> Self {
         App::setup();
 
@@ -72,6 +71,7 @@ impl App {
     /// Property setter
     ///
     /// Sets the name of the application
+    #[must_use]
     pub fn set_name(mut self, name: &str) -> Self {
         self.config.name = Some(name.to_string());
 
@@ -81,6 +81,7 @@ impl App {
     /// Property setter
     ///
     /// Sets the description of the application
+    #[must_use]
     pub fn set_description(mut self, description: &str) -> Self {
         self.config.description = Some(description.to_string());
 
@@ -90,6 +91,7 @@ impl App {
     /// Property setter
     ///
     /// Sets the authors of the application
+    #[must_use]
     pub fn set_authors(mut self, authors: Vec<String>) -> Self {
         self.config.authors = Some(authors);
 
@@ -99,6 +101,7 @@ impl App {
     /// Property setter
     ///
     /// Sets the version of the application
+    #[must_use]
     pub fn set_version(mut self, version: &str) -> Self {
         self.config.version = Some(version.to_string());
 

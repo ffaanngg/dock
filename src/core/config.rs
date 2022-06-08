@@ -1,3 +1,5 @@
+#![allow(clippy::module_name_repetitions)]
+
 use serde::{Deserialize, Serialize};
 use std::fs;
 
@@ -16,7 +18,7 @@ pub struct CargoConfigPackage {
 
 ///Holds the application config
 ///
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Default)]
 pub struct AppConfig {
     pub name: Option<String>,
     pub description: Option<String>,
@@ -24,22 +26,14 @@ pub struct AppConfig {
     pub version: Option<String>,
 }
 
-impl Default for AppConfig {
-    fn default() -> Self {
-        Self {
-            name: None,
-            description: None,
-            authors: None,
-            version: None,
-        }
-    }
-}
-
 impl AppConfig {
+
+    #[must_use]
     pub fn new() -> Self {
-        Default::default()
+        Self::default()
     }
 
+    #[must_use]
     pub fn from_crate() -> Self {
         let config = toml::from_str::<CargoConfig>(
             fs::read_to_string("./Cargo.toml")
