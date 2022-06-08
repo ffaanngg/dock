@@ -6,7 +6,7 @@ use std::fs;
 
 /// Represents a Dock application
 ///
-/// A `App` instance is used to build and run a command line application from start to finish.
+/// An `App` instance is used to build and run a command line application from start to finish.
 ///
 /// When a Dock app is initialized, by default, human_panic handler is set and on windows, an attempt to enable ansi support is made.
 ///
@@ -32,7 +32,7 @@ use std::fs;
 /// The command line application starts when the [`App::run()`] method is called.
 #[derive(Debug, Clone)]
 pub struct App {
-    pub config: AppConfig,
+    pub(crate) config: AppConfig,
 }
 
 impl Default for App {
@@ -44,7 +44,7 @@ impl Default for App {
 }
 
 impl App {
-    /// The setup function called when a application is initialized.
+    /// The setup function called when an application is initialized.
     /// This performs all the preliminary setup required to make sure the Dock application sails smoothly.
     fn setup() {
         setup_panic!();
@@ -101,6 +101,15 @@ impl App {
         self
     }
 
+    /// Property setter
+    ///
+    /// Sets the version of the application
+    pub fn set_version(mut self, version: &str) -> Self {
+        self.config.version = Some(version.to_string());
+
+        self
+    }
+
     pub fn register_command(mut self) -> Self {
         todo!()
     }
@@ -120,14 +129,19 @@ mod app_tests {
         let app = App::new()
             .set_name("Dock-test")
             .set_description("Dock unit test application")
-            .set_authors(vec!["Ferris".to_string()]);
+            .set_authors(vec!["Ferris".to_string()])
+            .set_version("1.2.3");
 
         assert_eq!(app.config.name.as_ref().unwrap(), &"Dock-test".to_string());
         assert_eq!(
             app.config.description.as_ref().unwrap(),
             &"Dock unit test application".to_string()
         );
-        assert_eq!(app.config.authors.as_ref().unwrap(), &vec!["Ferris".to_string()]);
+        assert_eq!(
+            app.config.authors.as_ref().unwrap(),
+            &vec!["Ferris".to_string()]
+        );
+        assert_eq!(app.config.version.as_ref().unwrap(), &"1.2.3".to_string());
     }
 
     #[test]
@@ -142,6 +156,7 @@ mod app_tests {
             &"Dock unit test application".to_string()
         );
         assert_eq!(app.config.authors.as_ref(), None);
+        assert_eq!(app.config.version.as_ref(), None);
     }
 
     #[test]
@@ -153,6 +168,10 @@ mod app_tests {
             app.config.description.as_ref().unwrap(),
             &"The simple, fast and powerful command line parser".to_string()
         );
-        assert_eq!(app.config.authors.as_ref().unwrap(), &vec!["dimensionhq".to_string()]);
+        assert_eq!(
+            app.config.authors.as_ref().unwrap(),
+            &vec!["dimensionhq".to_string()]
+        );
+        assert_eq!(app.config.version.as_ref().unwrap(), &"0.1.0".to_string());
     }
 }

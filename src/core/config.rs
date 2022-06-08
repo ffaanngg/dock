@@ -11,6 +11,7 @@ pub struct CargoConfigPackage {
     name: Option<String>,
     description: Option<String>,
     authors: Option<Vec<String>>,
+    version: Option<String>,
 }
 
 ///Holds the application config
@@ -20,6 +21,7 @@ pub struct AppConfig {
     pub name: Option<String>,
     pub description: Option<String>,
     pub authors: Option<Vec<String>>,
+    pub version: Option<String>,
 }
 
 impl AppConfig {
@@ -28,6 +30,7 @@ impl AppConfig {
             name: None,
             description: None,
             authors: None,
+            version: None,
         }
     }
 
@@ -43,6 +46,7 @@ impl AppConfig {
             name: config.package.name,
             description: config.package.description,
             authors: config.package.authors,
+            version: config.package.version,
         }
     }
 }
