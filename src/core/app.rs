@@ -1,4 +1,6 @@
-use crate::core::config::AppConfig;
+use std::{io::Read, vec};
+
+use crate::core::{command::Command, config::AppConfig, parser::Input};
 
 /// Represents a Dock application
 ///
@@ -27,12 +29,14 @@ use crate::core::config::AppConfig;
 #[derive(Debug, Clone)]
 pub struct App {
     pub(crate) config: AppConfig,
+    pub(crate) commands: Vec<Command>,
 }
 
 impl Default for App {
     fn default() -> Self {
         Self {
             config: AppConfig::new(),
+            commands: vec![],
         }
     }
 }
@@ -114,7 +118,12 @@ impl App {
     }
 
     pub fn run(self) {
-        todo!()
+        let mut buf = String::new();
+        std::io::stdin()
+            .read_to_string(&mut buf)
+            .expect("Failed to read standard input stream");
+
+        let command = Input::new(&buf);
     }
 }
 
