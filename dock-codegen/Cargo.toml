@@ -1,5 +1,5 @@
 [package]
-name = "dock-derive"
+name = "dock-codegen"
 version = "0.1.0"
 edition = "2021"
 description = "Default macro implementations for dock"

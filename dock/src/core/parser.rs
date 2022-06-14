@@ -1,7 +1,5 @@
-
-
 /// Represents a part of the  raw input
-#[derive(Debug, PartialEq)]
+#[derive(Debug, PartialEq, Eq)]
 pub(crate) enum InputPart {
     Program(String),
     Command(String),
@@ -20,7 +18,7 @@ pub(crate) struct Input {
 impl Input {
     fn get_part(raw: &str) -> InputPart {
         match raw {
-            arg if arg.starts_with("-") && !arg.starts_with("--") => {
+            arg if arg.starts_with('-') && !arg.starts_with("--") => {
                 InputPart::ShortArg(arg.to_string())
             }
             arg if arg.starts_with("--") => InputPart::LongArg(arg.to_string()),
@@ -40,7 +38,7 @@ impl Input {
         lexed.push(InputPart::Program(split_i.next().unwrap()));
 
         for item in split_i {
-            lexed.push(Self::get_part(&item))
+            lexed.push(Self::get_part(&item));
         }
 
         Self {
