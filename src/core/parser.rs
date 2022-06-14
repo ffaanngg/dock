@@ -1,5 +1,8 @@
-#[derive(Debug)]
-pub enum InputPart {
+
+
+/// Represents a part of the  raw input
+#[derive(Debug, PartialEq)]
+pub(crate) enum InputPart {
     Program(String),
     Command(String),
     ShortArg(String),
@@ -7,7 +10,8 @@ pub enum InputPart {
     String(String),
 }
 
-pub struct Input {
+/// Rppresents the raw input
+pub(crate) struct Input {
     raw: String,
     split: Vec<String>,
     lexed: Vec<InputPart>,
@@ -53,7 +57,7 @@ mod app_tests {
     use super::*;
 
     #[test]
-    fn test() {
+    fn shlex_parse() {
         let buf =
             r#"dock command -S --extended --string "This is a string with spaces""#.to_string();
 
@@ -67,6 +71,24 @@ mod app_tests {
                 "This is a string with spaces"
             ],
             Input::new(&buf).split
+        );
+    }
+
+    #[test]
+    fn lexer() {
+        let buf =
+            r#"dock command -S --extended --string "This is a string with spaces""#.to_string();
+
+        assert_eq!(
+            vec![
+                InputPart::Program("dock".to_string()),
+                InputPart::Command("command".to_string()),
+                InputPart::ShortArg("-S".to_string()),
+                InputPart::LongArg("--extended".to_string()),
+                InputPart::LongArg("--string".to_string()),
+                InputPart::String("This is a string with spaces".to_string())
+            ],
+            Input::new(&buf).lexed
         );
     }
 }
