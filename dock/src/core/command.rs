@@ -1,5 +1,5 @@
-trait CommandCallback {}
-#[derive(Debug, Clone)]
-pub struct Command {
-    name: String,
+use std::fmt::Debug;
+
+pub trait Command: Debug {
+    fn name(&self) -> String;
 }

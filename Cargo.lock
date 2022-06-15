@@ -30,6 +30,11 @@ dependencies = [
 [[package]]
 name = "dock-codegen"
 version = "0.1.0"
+dependencies = [
+ "dock",
+ "quote",
+ "syn",
+]
 
 [[package]]
 name = "hashbrown"

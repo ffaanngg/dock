@@ -9,6 +9,7 @@ pub(crate) enum InputPart {
 }
 
 /// Rppresents the raw input
+#[allow(dead_code)]
 pub(crate) struct Input {
     raw: String,
     split: Vec<String>,
