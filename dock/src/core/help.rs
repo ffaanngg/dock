@@ -5,7 +5,7 @@ use std::fmt;
 ///
 /// Contains the configuration and attributes required to construct the default help message.
 ///
-/// The default help message can be overriden by the user if required by creating a custom struct and implementing the `HelpMessage` trait.
+/// The default help message can be overridden by the user if required by creating a custom struct and implementing the `HelpMessage` trait.
 ///
 #[derive(Debug)]
 pub struct DefaultHelpStructure {
@@ -66,7 +66,6 @@ impl HelpMessage for DefaultHelpStructure {
 }
 
 impl DefaultHelpStructure {
-
     #[must_use]
     pub fn new(config: AppConfig) -> Self {
         Self {
