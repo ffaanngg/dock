@@ -8,7 +8,7 @@ use syn::{parse_macro_input, ItemFn};
 pub fn command(_attr: TokenStream, item: TokenStream) -> TokenStream {
     let input_fn = parse_macro_input!(item as ItemFn);
 
-    let name = input_fn.sig.ident;
+    let name = input_fn.clone().sig.ident;
 
     TokenStream::from(quote! {
 
@@ -21,6 +21,14 @@ pub fn command(_attr: TokenStream, item: TokenStream) -> TokenStream {
             fn name(&self) -> String{
                 format!("{:#?}", #name)
             }
+
+            fn call(&self){
+                #input_fn
+
+                #name()
+            }
+
+
         }
     })
 }
