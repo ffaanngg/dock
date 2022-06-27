@@ -1,5 +1,5 @@
-use crate::config::AppConfig;
-use std::fmt;
+use crate::{command::Command, config::AppConfig};
+use std::string::ToString;
 
 /// Represents a default help message
 ///
@@ -10,6 +10,7 @@ use std::fmt;
 #[derive(Debug)]
 pub struct DefaultHelpStructure {
     config: Box<AppConfig>,
+    commands: Vec<Box<dyn Command>>,
 }
 
 /// This trait handles the methods required to print the help command.
@@ -67,9 +68,10 @@ impl HelpMessage for DefaultHelpStructure {
 
 impl DefaultHelpStructure {
     #[must_use]
-    pub fn new(config: AppConfig) -> Self {
+    pub fn new(config: AppConfig, commands: Vec<Box<dyn Command>>) -> Self {
         Self {
             config: Box::new(config),
+            commands,
         }
     }
 
@@ -94,10 +96,7 @@ impl DefaultHelpStructure {
         let description = config.description.unwrap_or_default();
 
         format!(
-            r#"
-{} {}
-{}
-        "#,
+            "{} {}\n{}",
             crate::Color::Blue.paint(name),
             crate::Color::Blue.paint(version),
             description,
@@ -105,31 +104,27 @@ impl DefaultHelpStructure {
     }
 
     fn build_commands(&self) -> String {
-        String::new()
+        self.commands
+            .iter()
+            .map(ToString::to_string)
+            .collect::<Vec<String>>()
+            .join("\n")
     }
     fn build_commands_colored(&self) -> String {
-        String::new()
+        self.commands
+            .iter()
+            .map(ToString::to_string)
+            .collect::<Vec<String>>()
+            .join("\n")
     }
 
     fn build_footer(&self) -> String {
-        Self::pretty_vector(self.config.authors.as_ref().unwrap_or(&vec![]))
+        self.config.authors.as_ref().unwrap_or(&vec![]).join(", ")
     }
     fn build_footer_colored(&self) -> String {
         format!(
             "{}",
-            crate::Color::Blue.paint(Self::pretty_vector(
-                self.config.authors.as_ref().unwrap_or(&vec![])
-            ))
+            crate::Color::Blue.paint(self.config.authors.as_ref().unwrap_or(&vec![]).join(", "))
         )
-    }
-
-    #[allow(unused_must_use)]
-    fn pretty_vector<T: fmt::Debug>(vec: &[T]) -> String {
-        let mut pretty = String::new();
-
-        vec.iter()
-            .map(|i| pretty.push_str(format!("{:?}", i).as_str()));
-
-        pretty
     }
 }
