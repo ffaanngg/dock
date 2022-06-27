@@ -10,7 +10,5 @@ fn test_command() {
         println!("Dummy command called")
     }
 
-    let _app = App::from_crate()
-        .register_command(dummy);
-    
+    let _app = App::from_crate().register_command(dummy);
 }
