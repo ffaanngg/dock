@@ -34,7 +34,6 @@ pub struct AppConfig {
 }
 
 impl AppConfig {
-
     /// Construct the base default config
     #[must_use]
     pub fn new() -> Self {

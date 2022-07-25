@@ -1,7 +1,6 @@
 //! Contains the Dock application which handles the core logic of the framework.
-//! 
+//!
 //! The singleton `App` struct is used to register the commands and run the application.
-
 
 use std::io::Read;
 
@@ -134,7 +133,7 @@ impl App {
     }
 
     /// Property setter
-    /// 
+    ///
     /// Set the help command struct that is used for generating help commands
     #[must_use]
     pub fn set_help_command(mut self, command: impl HelpMessage + 'static) -> Self {

@@ -32,7 +32,6 @@ pub struct Context {
 }
 
 impl Context {
-
     /// Construct a new Context instance based on the command and the application
     #[must_use]
     pub fn new(command: Box<dyn Command>, app: App) -> Self {

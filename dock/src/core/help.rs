@@ -79,7 +79,6 @@ impl HelpMessage for DefaultHelpStructure {
 }
 
 impl DefaultHelpStructure {
-
     /// Create a new instance of `DefaultHelpStructure` using the application config and commands
     #[must_use]
     pub fn new(config: AppConfig, commands: Vec<Box<dyn Command>>) -> Self {

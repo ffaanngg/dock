@@ -1,7 +1,6 @@
 //! The core mechanics of the Dock framework
-//! 
+//!
 //! Contains all the important and main features of Dock
-
 
 pub mod app;
 pub mod command;
