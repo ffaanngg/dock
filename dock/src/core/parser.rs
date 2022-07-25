@@ -1,3 +1,5 @@
+//! Part of the Dock application that handles all parser logic
+
 /// Represents a part of the  raw input
 #[derive(Debug, PartialEq, Eq)]
 pub(crate) enum InputPart {

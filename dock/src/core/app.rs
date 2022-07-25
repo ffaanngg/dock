@@ -1,6 +1,15 @@
+//! Contains the Dock application which handles the core logic of the framework.
+//! 
+//! The singleton `App` struct is used to register the commands and run the application.
+
+
 use std::io::Read;
 
-use crate::core::{command::Command, config::AppConfig, parser::Input};
+use crate::{
+    context::Context,
+    core::{command::Command, config::AppConfig, parser::Input},
+    help::{DefaultHelpStructure, HelpMessage},
+};
 
 /// Represents a Dock application
 ///
@@ -9,12 +18,11 @@ use crate::core::{command::Command, config::AppConfig, parser::Input};
 /// When a Dock app is initialized, by default, an attempt to enable ansi support is made.
 ///
 /// The suggested approach is to use the [`App::from_crate`] constructor to automatically build an application based on the crate config.
-/// ```rsmno_run
+/// ```rs,no_run
 ///
-/// fn main(){
-///     App::from_crate()
-///         .run()
-/// }
+/// App::from_crate()
+///     .run()
+///
 /// ```
 ///
 /// However, it can be set manually and built by each stage using their respective config setters.
@@ -26,10 +34,13 @@ use crate::core::{command::Command, config::AppConfig, parser::Input};
 /// ```
 ///  
 /// The command line application starts when the [`App::run()`] method is called.
-#[derive(Debug)]
 pub struct App {
+    /// Configuration of the application
     pub(crate) config: AppConfig,
+    /// Commands registered to the application
     pub(crate) commands: Vec<Box<dyn Command>>,
+    /// Help structure used for help messages
+    pub(crate) help: Option<Box<dyn HelpMessage>>,
 }
 
 impl Default for App {
@@ -37,6 +48,7 @@ impl Default for App {
         Self {
             config: AppConfig::new(),
             commands: vec![],
+            help: None,
         }
     }
 }
@@ -121,6 +133,37 @@ impl App {
         self
     }
 
+    /// Property setter
+    /// 
+    /// Set the help command struct that is used for generating help commands
+    #[must_use]
+    pub fn set_help_command(mut self, command: impl HelpMessage + 'static) -> Self {
+        self.help = Some(Box::new(command));
+        self
+    }
+    #[must_use]
+    fn construct_context(self, command: impl Command + 'static) -> Context {
+        Context::new(Box::new(command), self)
+    }
+
+    #[must_use]
+    fn generate_default_help(&self) -> Box<dyn HelpMessage> {
+        Box::new(DefaultHelpStructure::new(
+            self.config.clone(),
+            self.commands.clone(),
+        ))
+    }
+
+    #[must_use]
+    fn get_help_structure(&self) -> Box<dyn HelpMessage> {
+        if let Some(help) = &self.help {
+            dyn_clone::clone_box(&**help)
+        } else {
+            self.generate_default_help()
+        }
+    }
+
+    ///Start the Dock application
     pub fn run(self) {
         let mut buf = String::new();
         std::io::stdin()

@@ -1,5 +1,9 @@
+//! Part of the Dock application that handles help command logic
+
+use dyn_clone::DynClone;
+use std::fmt::Debug;
+
 use crate::{command::Command, config::AppConfig};
-use std::string::ToString;
 
 /// Represents a default help message
 ///
@@ -7,7 +11,7 @@ use std::string::ToString;
 ///
 /// The default help message can be overridden by the user if required by creating a custom struct and implementing the `HelpMessage` trait.
 ///
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct DefaultHelpStructure {
     config: Box<AppConfig>,
     commands: Vec<Box<dyn Command>>,
@@ -27,9 +31,17 @@ pub struct DefaultHelpStructure {
 /// }
 /// ````
 #[allow(clippy::module_name_repetitions)]
-pub trait HelpMessage {
+pub trait HelpMessage: DynClone {
+    /// Get the default help message
     fn get_help(&self) -> String;
+    /// Get the color formatted version of the help message
     fn get_help_colored(&self) -> String;
+}
+
+impl Debug for dyn HelpMessage {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{}", self.get_help())
+    }
 }
 
 impl HelpMessage for DefaultHelpStructure {
@@ -67,6 +79,8 @@ impl HelpMessage for DefaultHelpStructure {
 }
 
 impl DefaultHelpStructure {
+
+    /// Create a new instance of `DefaultHelpStructure` using the application config and commands
     #[must_use]
     pub fn new(config: AppConfig, commands: Vec<Box<dyn Command>>) -> Self {
         Self {
@@ -106,14 +120,15 @@ impl DefaultHelpStructure {
     fn build_commands(&self) -> String {
         self.commands
             .iter()
-            .map(ToString::to_string)
+            .map(|i| i.display())
             .collect::<Vec<String>>()
             .join("\n")
     }
+
     fn build_commands_colored(&self) -> String {
         self.commands
             .iter()
-            .map(ToString::to_string)
+            .map(|i| i.display_colored())
             .collect::<Vec<String>>()
             .join("\n")
     }
@@ -121,6 +136,7 @@ impl DefaultHelpStructure {
     fn build_footer(&self) -> String {
         self.config.authors.as_ref().unwrap_or(&vec![]).join(", ")
     }
+
     fn build_footer_colored(&self) -> String {
         format!(
             "{}",
