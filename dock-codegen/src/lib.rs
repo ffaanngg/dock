@@ -36,7 +36,7 @@ pub fn command(attr: TokenStream, item: TokenStream) -> TokenStream {
 
     TokenStream::from(quote! {
 
-        #[derive(Debug)]
+        #[derive(Debug, Clone)]
         #[allow(non_camel_case_types)]
         pub struct #fn_name;
 

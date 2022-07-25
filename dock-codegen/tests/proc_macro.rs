@@ -12,5 +12,4 @@ fn test_proc_macro() {
 
     assert_eq!("test", test.name());
     println!("-> {}", test.description());
-    test.call();
 }
